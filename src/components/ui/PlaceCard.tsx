@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Place } from '@/types';
+import SaveButton from './SaveButton';
+
 
 interface PlaceCardProps {
   place: Place;
