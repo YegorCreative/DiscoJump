@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import Image from 'next/image';
 import { Place } from '@/types';
 
@@ -12,6 +13,11 @@ export default function VibeCard({ place, size = 'large' }: VibeCardProps) {
   const isLarge = size === 'large';
 
   return (
+    <Link
+      href={`/place/${place.id}`}
+      aria-label={`View details for ${place.name}`}
+      style={{ textDecoration: 'none', flexShrink: 0, display: 'block' }}
+    >
     <article
       id={`vibe-card-${place.id}`}
       style={{
@@ -25,6 +31,14 @@ export default function VibeCard({ place, size = 'large' }: VibeCardProps) {
         border: '1px solid var(--dj-border)',
         boxShadow: 'var(--dj-shadow-lg)',
         transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)';
+        (e.currentTarget as HTMLElement).style.boxShadow = '0 16px 40px rgba(155,93,229,0.25)';
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
+        (e.currentTarget as HTMLElement).style.boxShadow = 'var(--dj-shadow-lg)';
       }}
     >
       {/* Background image */}
@@ -164,5 +178,6 @@ export default function VibeCard({ place, size = 'large' }: VibeCardProps) {
         </div>
       </div>
     </article>
+    </Link>
   );
 }
