@@ -1,20 +1,36 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useVibeProfile } from '@/hooks/useVibeProfile';
 import { VIBE_TYPES } from '@/data/quiz';
 
+const DISMISSED_KEY = 'dj_dismissed_welcome';
+
 export default function VibeDNABanner() {
   const { profile, hydrated } = useVibeProfile();
+  const [dismissed, setDismissed] = useState(false);
+  const [dismissHydrated, setDismissHydrated] = useState(false);
+
+  useEffect(() => {
+    try {
+      setDismissed(localStorage.getItem(DISMISSED_KEY) === 'true');
+    } catch {}
+    setDismissHydrated(true);
+  }, []);
+
+  const handleExploreFirst = () => {
+    setDismissed(true);
+    try {
+      localStorage.setItem(DISMISSED_KEY, 'true');
+    } catch {}
+  };
 
   // Skeleton while hydrating
-  if (!hydrated) {
+  if (!hydrated || !dismissHydrated) {
     return (
-      <div
-        className="section-px"
-        style={{ marginBottom: 20 }}
-        aria-hidden="true"
-      >
+      <div className="section-px" style={{ marginBottom: 20 }} aria-hidden="true">
         <div
           style={{
             height: 52,
