@@ -174,8 +174,9 @@ export default function ProfileVibeSection() {
             ✨ Your Vibe DNA
           </span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <a
+            <Link
               href="/vibe"
+              aria-label="View your full Vibe DNA"
               style={{
                 fontSize: 12,
                 fontWeight: 600,
@@ -187,7 +188,7 @@ export default function ProfileVibeSection() {
               }}
             >
               Full DNA →
-            </a>
+            </Link>
           </div>
         </div>
 

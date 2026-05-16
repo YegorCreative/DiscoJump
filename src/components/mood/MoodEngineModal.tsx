@@ -215,7 +215,9 @@ export default function MoodEngineModal({ onClose }: MoodEngineModalProps) {
         <button
           id="mood-back-btn"
           onClick={showBack ? goBack : undefined}
-          aria-label="Go back"
+          aria-label={showBack ? 'Go back' : undefined}
+          aria-hidden={!showBack}
+          tabIndex={showBack ? undefined : -1}
           style={{
             width: 40,
             height: 40,

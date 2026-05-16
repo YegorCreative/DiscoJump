@@ -122,6 +122,9 @@ export default function DiscoverClient() {
         {/* ── Search bar ── */}
         <div className="section-px" style={{ marginBottom: 20 }}>
           <div
+            role="button"
+            tabIndex={0}
+            aria-label="Search places, vibes, cities"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -131,6 +134,7 @@ export default function DiscoverClient() {
               background: 'var(--dj-card)',
               border: '1px solid var(--dj-border)',
               backdropFilter: 'blur(12px)',
+              cursor: 'text',
             }}
           >
             <span style={{ fontSize: 18 }}>🔍</span>

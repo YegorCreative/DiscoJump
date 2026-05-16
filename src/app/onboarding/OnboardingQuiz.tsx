@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import GlowBackground from '@/components/layout/GlowBackground';
 import {
@@ -416,22 +417,23 @@ function ResultView({
       </motion.button>
 
       {/* Skip to home */}
-      <motion.a
-        href="/"
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
-        style={{
-          marginTop: 18,
-          fontSize: 12,
-          color: 'var(--dj-muted)',
-          textDecoration: 'none',
-          position: 'relative',
-          zIndex: 1,
-        }}
+        style={{ marginTop: 18, position: 'relative', zIndex: 1 }}
       >
-        Back to home
-      </motion.a>
+        <Link
+          href="/"
+          style={{
+            fontSize: 12,
+            color: 'var(--dj-muted)',
+            textDecoration: 'none',
+          }}
+        >
+          Back to home
+        </Link>
+      </motion.div>
     </div>
   );
 }

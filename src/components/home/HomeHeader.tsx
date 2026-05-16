@@ -24,6 +24,7 @@ export default function HomeHeader() {
       <div style={{ position: 'relative', zIndex: 1 }}>
         {/* Greeting */}
         <p
+          suppressHydrationWarning
           style={{
             fontSize: 13,
             fontWeight: 500,

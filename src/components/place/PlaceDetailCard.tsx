@@ -312,6 +312,15 @@ export default function PlaceDetailCard({ place }: PlaceDetailCardProps) {
           <button
             id="place-map-btn"
             aria-label={`Open ${place.name} in maps`}
+            onClick={() =>
+              window.open(
+                `https://maps.google.com/?q=${encodeURIComponent(
+                  `${place.name} ${place.location}`
+                )}`,
+                '_blank',
+                'noopener,noreferrer'
+              )
+            }
             style={{
               flex: 1,
               padding: '13px',
