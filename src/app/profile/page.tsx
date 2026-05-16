@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import AppShell from '@/components/layout/AppShell';
-import { vibeDNATraits } from '@/data/vibeDNA';
+import ProfileVibeSection from './ProfileVibeSection';
 
 export const metadata: Metadata = {
   title: 'Profile — Disco Jump',
@@ -16,7 +16,6 @@ const settingsItems = [
 ];
 
 export default function ProfilePage() {
-  const topTraits = vibeDNATraits.slice(0, 3);
 
   return (
     <AppShell activeTab="profile">
@@ -118,65 +117,8 @@ export default function ProfilePage() {
           </button>
         </div>
 
-        {/* Vibe summary card */}
-        <div className="section-px" style={{ marginBottom: 28 }}>
-          <div
-            id="vibe-summary-card"
-            className="glass-card"
-            style={{
-              padding: '16px 18px',
-              background: 'rgba(155,93,229,0.06)',
-              borderColor: 'rgba(155,93,229,0.2)',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-              <span
-                className="font-display"
-                style={{ fontSize: 15, fontWeight: 700, color: 'var(--dj-text)' }}
-              >
-                ✨ Your Vibe Summary
-              </span>
-              <a
-                href="/vibe"
-                style={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  background: 'var(--dj-gradient-primary)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  textDecoration: 'none',
-                }}
-              >
-                Full DNA →
-              </a>
-            </div>
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              {topTraits.map((trait) => (
-                <div
-                  key={trait.id}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 6,
-                    padding: '6px 12px',
-                    borderRadius: 'var(--dj-radius-full)',
-                    background: `${trait.color}18`,
-                    border: `1px solid ${trait.color}40`,
-                  }}
-                >
-                  <span style={{ fontSize: 14 }}>{trait.icon}</span>
-                  <span style={{ fontSize: 12, fontWeight: 600, color: trait.color }}>
-                    {trait.trait}
-                  </span>
-                  <span style={{ fontSize: 12, fontWeight: 700, color: trait.color, opacity: 0.7 }}>
-                    {trait.percentage}%
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        {/* Vibe DNA section — dynamic, reads from localStorage */}
+        <ProfileVibeSection />
 
         {/* Settings */}
         <div className="section-px" style={{ marginBottom: 32 }}>

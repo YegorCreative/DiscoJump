@@ -461,12 +461,12 @@ export default function OnboardingQuiz() {
   // Get the current answer for the active step
   const currentAnswer: string | string[] = currentStepDef.multiple
     ? answers.dealBreakers
-    : (answers as Record<string, string>)[currentStepDef.id] ?? '';
+    : (answers as unknown as Record<string, string>)[currentStepDef.id] ?? '';
 
   // Can the user proceed?
   const canProceed = currentStepDef.multiple
     ? true // deal breakers are optional
-    : !!(answers as Record<string, string>)[currentStepDef.id];
+    : !!(answers as unknown as Record<string, string>)[currentStepDef.id];
 
   const handleSelect = useCallback(
     (optionId: string) => {
@@ -483,7 +483,7 @@ export default function OnboardingQuiz() {
         setAnswers((prev) => ({
           ...prev,
           [currentStepDef.id]: optionId,
-        }));
+        } as QuizAnswers));
       }
     },
     [currentStepDef]
