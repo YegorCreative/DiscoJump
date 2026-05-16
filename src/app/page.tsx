@@ -1,6 +1,6 @@
 import AppShell from '@/components/layout/AppShell';
 import HomeHeader from '@/components/home/HomeHeader';
-import IFeelLikeCTA from '@/components/home/IFeelLikeCTA';
+import HomeClient from '@/components/home/HomeClient';
 import MoodChipRow from '@/components/home/MoodChipRow';
 import RecommendedPlaces from '@/components/home/RecommendedPlaces';
 import HiddenGems from '@/components/home/HiddenGems';
@@ -17,8 +17,8 @@ export default function HomePage() {
       {/* Greeting + logo + location */}
       <HomeHeader />
 
-      {/* Primary CTA */}
-      <IFeelLikeCTA />
+      {/* Primary CTA + Mood Engine Modal */}
+      <HomeClient />
 
       {/* Mood chips */}
       <MoodChipRow />
