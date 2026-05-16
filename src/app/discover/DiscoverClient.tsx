@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 import AppShell from '@/components/layout/AppShell';
 import SectionHeader from '@/components/ui/SectionHeader';
 import PlaceCard from '@/components/ui/PlaceCard';
@@ -188,7 +190,7 @@ export default function DiscoverClient() {
           })}
         </div>
 
-        {/* ── DNA context strip (For You only, when profile exists) ── */}
+        {/* ── DNA context strip (For You + profile exists) ── */}
         {activeFilter === 'for-you' && profile && hydrated && (
           <div className="section-px" style={{ marginBottom: 16 }}>
             <div
@@ -218,6 +220,54 @@ export default function DiscoverClient() {
               </p>
             </div>
           </div>
+        )}
+
+        {/* ── No-profile prompt for For You ── */}
+        {activeFilter === 'for-you' && !profile && hydrated && (
+          <motion.div
+            className="section-px"
+            style={{ marginBottom: 16 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 12,
+                padding: '12px 14px',
+                borderRadius: 'var(--dj-radius-lg)',
+                background: 'rgba(155,93,229,0.06)',
+                border: '1px dashed rgba(155,93,229,0.28)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ fontSize: 18, flexShrink: 0 }}>🧬</span>
+                <p style={{ fontSize: 13, color: 'var(--dj-text-secondary)', lineHeight: 1.4 }}>
+                  Build your Vibe DNA to unlock smarter matches.
+                </p>
+              </div>
+              <Link
+                href="/onboarding"
+                aria-label="Take the Vibe DNA quiz"
+                style={{
+                  fontSize: 12,
+                  fontWeight: 700,
+                  background: 'var(--dj-gradient-primary)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  textDecoration: 'none',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                }}
+              >
+                Start Quiz →
+              </Link>
+            </div>
+          </motion.div>
         )}
 
         {/* ── Places grid ── */}
