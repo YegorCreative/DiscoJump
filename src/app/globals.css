@@ -288,3 +288,37 @@ body {
   opacity: 1;
   color: var(--dj-orange);
 }
+
+/* ── Disco Ball Animations ── */
+@keyframes discoBallSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes discoBallFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes discoBallParticle {
+  0%, 100% {
+    opacity: 0.55;
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    opacity: 0.9;
+    transform: translate(6px, -9px) scale(1.2);
+  }
+  66% {
+    opacity: 0.3;
+    transform: translate(-5px, 6px) scale(0.82);
+  }
+}
+
+/* ── Reduced-motion overrides ── */
+@media (prefers-reduced-motion: reduce) {
+  .disco-spin    { animation: none !important; }
+  .disco-float   { animation: none !important; }
+  .disco-particle { animation: none !important; opacity: 0.4 !important; }
+}
+
