@@ -1,8 +1,12 @@
 'use client';
 
+import { useMemo } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Place } from '@/types';
 import SelectedMoodTags from './SelectedMoodTags';
+import { useVibeProfile } from '@/hooks/useVibeProfile';
+import { scorePlaceForProfile } from '@/lib/placeScoring';
 
 interface MoodResultPreviewProps {
   feeling: string | null;
@@ -30,6 +34,24 @@ export default function MoodResultPreview({
   distanceLabel,
   distanceEmoji,
 }: MoodResultPreviewProps) {
+  const { profile } = useVibeProfile();
+
+  // Re-rank the mood-selected places by DNA score when profile exists
+  const rankedPlaces = useMemo(() => {
+    if (!profile) return places;
+    return [...places].sort(
+      (a, b) =>
+        scorePlaceForProfile(b, profile.vibeTypeId) -
+        scorePlaceForProfile(a, profile.vibeTypeId)
+    );
+  }, [places, profile]);
+
+  // Pre-compute scores once for badge display
+  const dnaScores = useMemo(() => {
+    if (!profile) return new Map<string, number>();
+    return new Map(places.map((p) => [p.id, scorePlaceForProfile(p, profile.vibeTypeId)]));
+  }, [places, profile]);
+
   const tags = [
     { label: feelingLabel, emoji: feelingEmoji },
     { label: energyLabel, emoji: energyEmoji },
@@ -72,29 +94,82 @@ export default function MoodResultPreview({
         style={{
           height: 1,
           background: 'var(--dj-border)',
-          marginBottom: 20,
+          marginBottom: 14,
           marginTop: 4,
         }}
       />
 
-      {/* Place results */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 24 }}>
-        {places.map((place, i) => (
-          <article
-            key={place.id}
-            id={`result-place-${place.id}`}
+      {/* DNA ranking label */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 14,
+        }}
+      >
+        {profile ? (
+          <span
             style={{
-              display: 'flex',
-              gap: 12,
-              padding: '12px',
-              borderRadius: 'var(--dj-radius-lg)',
-              background: 'var(--dj-card)',
-              border: '1px solid var(--dj-border)',
-              backdropFilter: 'blur(12px)',
-              cursor: 'pointer',
-              transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 5,
+              fontSize: 11,
+              fontWeight: 700,
+              color: '#00F5FF',
+              letterSpacing: '0.02em',
             }}
           >
+            🧬 Ranked by your Vibe DNA
+          </span>
+        ) : (
+          <>
+            <span style={{ fontSize: 11, color: 'var(--dj-muted)' }}>
+              Take the quiz to improve matches
+            </span>
+            <Link
+              href="/onboarding"
+              aria-label="Build your Vibe DNA"
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                background: 'var(--dj-gradient-primary)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                textDecoration: 'none',
+                flexShrink: 0,
+              }}
+            >
+              Build DNA →
+            </Link>
+          </>
+        )}
+      </div>
+
+      {/* Place results */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 24 }}>
+        {rankedPlaces.map((place, i) => (
+          <Link
+            key={place.id}
+            href={`/place/${place.id}`}
+            aria-label={`View details for ${place.name}`}
+            style={{ textDecoration: 'none', display: 'block' }}
+          >
+            <article
+              id={`result-place-${place.id}`}
+              style={{
+                display: 'flex',
+                gap: 12,
+                padding: '12px',
+                borderRadius: 'var(--dj-radius-lg)',
+                background: 'var(--dj-card)',
+                border: '1px solid var(--dj-border)',
+                backdropFilter: 'blur(12px)',
+                cursor: 'pointer',
+                transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+              }}
+            >
             {/* Image */}
             <div
               style={{
@@ -160,20 +235,29 @@ export default function MoodResultPreview({
                 >
                   {place.name}
                 </h3>
+                {/* Match badge — DNA score when profile, static vibeMatch otherwise */}
                 <span
                   style={{
                     fontSize: 11,
                     fontWeight: 700,
-                    color: 'var(--dj-purple-light)',
-                    background: 'rgba(155,93,229,0.15)',
-                    border: '1px solid rgba(155,93,229,0.3)',
                     borderRadius: 'var(--dj-radius-full)',
                     padding: '2px 7px',
                     marginLeft: 6,
                     flexShrink: 0,
+                    ...(profile
+                      ? {
+                          color: '#00F5FF',
+                          background: 'rgba(0,245,255,0.12)',
+                          border: '1px solid rgba(0,245,255,0.25)',
+                        }
+                      : {
+                          color: 'var(--dj-purple-light)',
+                          background: 'rgba(155,93,229,0.15)',
+                          border: '1px solid rgba(155,93,229,0.3)',
+                        }),
                   }}
                 >
-                  ✦ {place.vibeMatch}%
+                  {profile ? `🧬 ${dnaScores.get(place.id)}%` : `✦ ${place.vibeMatch}%`}
                 </span>
               </div>
 
@@ -205,7 +289,8 @@ export default function MoodResultPreview({
                 ))}
               </div>
             </div>
-          </article>
+            </article>
+          </Link>
         ))}
       </div>
 
