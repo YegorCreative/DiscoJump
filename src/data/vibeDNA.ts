@@ -20,7 +20,7 @@ export const vibeDNATraits: VibeDNATrait[] = [
   {
     id: 'culture-seeker',
     trait: 'Culture Seeker',
-    description: 'Art, music, film, food — you're always chasing the next experience.',
+    description: "Art, music, film, food \u2014 you're always chasing the next experience.",
     percentage: 91,
     color: '#FF6B35',
     icon: '🎨',
