@@ -118,7 +118,18 @@ function EmptyState() {
 }
 
 // ─── Individual saved place row ────────────────────────────────────────────────
-function SavedPlaceRow({ place }: { place: Place }) {
+interface SavedPlaceRowProps {
+  place: Place;
+  onToggle: (id: string) => void;
+}
+
+function SavedPlaceRow({ place, onToggle }: SavedPlaceRowProps) {
+  const handleUnsave = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onToggle(place.id);
+  };
+
   return (
     <article
       id={`saved-place-${place.id}`}
@@ -130,10 +141,9 @@ function SavedPlaceRow({ place }: { place: Place }) {
         padding: '12px 14px',
         borderRadius: 'var(--dj-radius-lg)',
         overflow: 'hidden',
-        position: 'relative',
       }}
     >
-      {/* Image */}
+      {/* Thumbnail */}
       <Link
         href={`/place/${place.id}`}
         aria-label={`View details for ${place.name}`}
@@ -147,7 +157,6 @@ function SavedPlaceRow({ place }: { place: Place }) {
             height: 72,
             borderRadius: 'var(--dj-radius-md)',
             overflow: 'hidden',
-            flexShrink: 0,
           }}
         >
           <Image
@@ -180,64 +189,80 @@ function SavedPlaceRow({ place }: { place: Place }) {
       {/* Info */}
       <Link
         href={`/place/${place.id}`}
-        aria-label={`View details for ${place.name}`}
-        style={{
-          textDecoration: 'none',
-          flex: 1,
-          minWidth: 0,
-        }}
+        aria-label={`View ${place.name}`}
+        style={{ textDecoration: 'none', flex: 1, minWidth: 0 }}
       >
-        <div>
-          <h3
-            className="font-display"
-            style={{
-              fontSize: 15,
-              fontWeight: 700,
-              color: 'var(--dj-text)',
-              letterSpacing: '-0.02em',
-              marginBottom: 3,
-              lineHeight: 1.2,
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            }}
-          >
-            {place.categoryEmoji} {place.name}
-          </h3>
-          <p
-            style={{
-              fontSize: 12,
-              color: 'var(--dj-text-secondary)',
-              marginBottom: 6,
-            }}
-          >
-            📍 {place.location} · {place.distance}
-          </p>
-          <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
-            {place.tags.slice(0, 2).map((tag) => (
-              <span
-                key={tag}
-                style={{
-                  fontSize: 10,
-                  fontWeight: 500,
-                  color: 'var(--dj-text-secondary)',
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: 4,
-                  padding: '2px 6px',
-                }}
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
+        <h3
+          className="font-display"
+          style={{
+            fontSize: 15,
+            fontWeight: 700,
+            color: 'var(--dj-text)',
+            letterSpacing: '-0.02em',
+            marginBottom: 3,
+            lineHeight: 1.2,
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          {place.categoryEmoji} {place.name}
+        </h3>
+        <p
+          style={{
+            fontSize: 12,
+            color: 'var(--dj-text-secondary)',
+            marginBottom: 6,
+          }}
+        >
+          📍 {place.location} · {place.distance}
+        </p>
+        <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
+          {place.tags.slice(0, 2).map((tag) => (
+            <span
+              key={tag}
+              style={{
+                fontSize: 10,
+                fontWeight: 500,
+                color: 'var(--dj-text-secondary)',
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: 4,
+                padding: '2px 6px',
+              }}
+            >
+              {tag}
+            </span>
+          ))}
         </div>
       </Link>
 
-      {/* Save / unsave button */}
-      <div style={{ flexShrink: 0 }}>
-        <SaveButton placeId={place.id} size="sm" stopPropagation={true} />
-      </div>
+      {/* Unsave button — inline flex item, no absolute positioning */}
+      <button
+        onClick={handleUnsave}
+        aria-label={`Remove ${place.name} from saved`}
+        aria-pressed={true}
+        style={{
+          flexShrink: 0,
+          width: 36,
+          height: 36,
+          borderRadius: '50%',
+          border: '1.5px solid rgba(155,93,229,0.5)',
+          background:
+            'linear-gradient(135deg, rgba(155,93,229,0.45), rgba(247,37,133,0.35))',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: 15,
+          cursor: 'pointer',
+          boxShadow: '0 0 14px rgba(155,93,229,0.4)',
+          transition: 'all 0.2s ease',
+        }}
+      >
+        🔖
+      </button>
     </article>
   );
 }
