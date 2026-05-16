@@ -70,6 +70,8 @@ export default function PlaceCard({ place }: PlaceCardProps) {
           <div style={{ position: 'absolute', bottom: 8, left: 10, fontSize: 18 }}>
             {place.categoryEmoji}
           </div>
+          {/* Save button */}
+          <SaveButton placeId={place.id} size="sm" stopPropagation={true} />
         </div>
 
         {/* Content */}

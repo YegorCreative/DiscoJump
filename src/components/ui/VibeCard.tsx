@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Place } from '@/types';
+import SaveButton from './SaveButton';
 
 interface VibeCardProps {
   place: Place;
@@ -177,6 +178,9 @@ export default function VibeCard({ place, size = 'large' }: VibeCardProps) {
           ))}
         </div>
       </div>
+
+      {/* Save button — bottom-right corner */}
+      <SaveButton placeId={place.id} size="sm" stopPropagation={true} />
     </article>
     </Link>
   );

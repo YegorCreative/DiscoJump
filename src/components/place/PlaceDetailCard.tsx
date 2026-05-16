@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Place } from '@/types';
+import SaveButton from '@/components/ui/SaveButton';
 
 interface PlaceDetailCardProps {
   place: Place;
@@ -304,30 +305,7 @@ export default function PlaceDetailCard({ place }: PlaceDetailCardProps) {
       {/* ── Action buttons ── */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 16 }}>
         {/* Save */}
-        <button
-          id="place-save-btn"
-          aria-label={`Save ${place.name} to a collection`}
-          style={{
-            width: '100%',
-            padding: '15px',
-            borderRadius: 'var(--dj-radius-xl)',
-            border: 'none',
-            background: 'var(--dj-gradient-primary)',
-            color: 'white',
-            fontSize: 15,
-            fontWeight: 700,
-            fontFamily: 'var(--font-display)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 8,
-            boxShadow: '0 6px 28px rgba(155,93,229,0.3)',
-            letterSpacing: '-0.01em',
-          }}
-        >
-          🔖 Save to Collection
-        </button>
+        <SaveButton placeId={place.id} size="lg" />
 
         {/* Row: Open in Map + Share */}
         <div style={{ display: 'flex', gap: 10 }}>
