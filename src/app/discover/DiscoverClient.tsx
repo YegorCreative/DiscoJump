@@ -28,6 +28,7 @@ const FILTERS: Array<{ id: FilterId; label: string }> = [
 export default function DiscoverClient() {
   const { profile, hydrated } = useVibeProfile();
   const [activeFilter, setActiveFilter] = useState<FilterId>('for-you');
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Pre-compute DNA scores once when profile is available
   const dnaScores = useMemo(() => {
@@ -38,45 +39,65 @@ export default function DiscoverClient() {
   const showDNABadge = activeFilter === 'for-you' && !!profile;
 
   const filteredPlaces = useMemo(() => {
+    // 1. Apply chip filter
+    let result: typeof places;
     switch (activeFilter) {
       case 'for-you':
-        return [...places].sort((a, b) => {
+        result = [...places].sort((a, b) => {
           const scoreA = dnaScores.get(a.id) ?? a.vibeMatch;
           const scoreB = dnaScores.get(b.id) ?? b.vibeMatch;
           return scoreB - scoreA;
         });
+        break;
       case 'food':
-        return places.filter((p) =>
+        result = places.filter((p) =>
           ['restaurant', 'coffee'].includes(p.category.toLowerCase())
         );
+        break;
       case 'nightlife':
-        return places.filter((p) =>
+        result = places.filter((p) =>
           ['nightclub', 'rooftop bar', 'beach club'].includes(p.category.toLowerCase())
         );
+        break;
       case 'cozy': {
         const cozyCats = ['bookshop bar', 'coffee', 'jazz bar'];
         const cozyTags = ['lo-fi', 'dimly lit', 'wine', 'books', 'vinyl'];
-        return places.filter((p) => {
+        result = places.filter((p) => {
           const cat = p.category.toLowerCase();
           const tags = p.tags.map((t) => t.toLowerCase());
           return cozyCats.includes(cat) || tags.some((t) => cozyTags.includes(t));
         });
+        break;
       }
       case 'adventure': {
         const adventureCats = ['beach club', 'rooftop bar'];
         const adventureTags = ['beach', 'day party', 'rooftop', 'views', 'sunset'];
-        return places.filter((p) => {
+        result = places.filter((p) => {
           const cat = p.category.toLowerCase();
           const tags = p.tags.map((t) => t.toLowerCase());
           return adventureCats.includes(cat) || tags.some((t) => adventureTags.includes(t));
         });
+        break;
       }
       case 'hidden-gems':
-        return places.filter((p) => p.isHiddenGem);
+        result = places.filter((p) => p.isHiddenGem);
+        break;
       default:
-        return places;
+        result = places;
     }
-  }, [activeFilter, dnaScores]);
+
+    // 2. Apply search on top of chip filter
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return result;
+    return result.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q) ||
+        p.location.toLowerCase().includes(q) ||
+        p.description.toLowerCase().includes(q) ||
+        p.tags.some((t) => t.toLowerCase().includes(q))
+    );
+  }, [activeFilter, dnaScores, searchQuery]);
 
   const vibe = profile ? VIBE_TYPES[profile.vibeTypeId] : null;
 
@@ -88,8 +109,9 @@ export default function DiscoverClient() {
         ? 'Top Places'
         : FILTERS.find((f) => f.id === activeFilter)?.label.replace(/^\S+\s/, '') ?? 'Places';
 
-  const sectionSubtitle =
-    activeFilter === 'for-you' && profile
+  const sectionSubtitle = searchQuery.trim()
+    ? `${filteredPlaces.length} result${filteredPlaces.length !== 1 ? 's' : ''} for "${searchQuery.trim()}"`
+    : activeFilter === 'for-you' && profile
       ? `Ranked for ${vibe!.label}`
       : activeFilter === 'for-you'
         ? 'Highest vibe match'
@@ -122,9 +144,6 @@ export default function DiscoverClient() {
         {/* ── Search bar ── */}
         <div className="section-px" style={{ marginBottom: 20 }}>
           <div
-            role="button"
-            tabIndex={0}
-            aria-label="Search places, vibes, cities"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -132,15 +151,51 @@ export default function DiscoverClient() {
               padding: '13px 16px',
               borderRadius: 'var(--dj-radius-lg)',
               background: 'var(--dj-card)',
-              border: '1px solid var(--dj-border)',
+              border: searchQuery
+                ? '1px solid rgba(155,93,229,0.45)'
+                : '1px solid var(--dj-border)',
               backdropFilter: 'blur(12px)',
-              cursor: 'text',
+              transition: 'border-color 0.15s ease',
             }}
           >
-            <span style={{ fontSize: 18 }}>🔍</span>
-            <span style={{ fontSize: 15, color: 'var(--dj-muted)' }}>
-              Search places, vibes, cities…
-            </span>
+            <span style={{ fontSize: 18, flexShrink: 0 }}>🔍</span>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search places, vibes, cities…"
+              aria-label="Search places, vibes, cities"
+              style={{
+                flex: 1,
+                background: 'none',
+                border: 'none',
+                outline: 'none',
+                fontSize: 15,
+                color: 'var(--dj-text)',
+                caretColor: 'var(--dj-purple-light)',
+                minWidth: 0,
+              }}
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                aria-label="Clear search"
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: '0 2px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexShrink: 0,
+                  color: 'var(--dj-muted)',
+                  fontSize: 16,
+                  lineHeight: 1,
+                }}
+              >
+                ✕
+              </button>
+            )}
           </div>
         </div>
 
@@ -284,9 +339,44 @@ export default function DiscoverClient() {
         {filteredPlaces.length === 0 ? (
           <div
             className="section-px"
-            style={{ paddingBottom: 32, textAlign: 'center', color: 'var(--dj-muted)', fontSize: 14 }}
+            style={{ paddingBottom: 32, textAlign: 'center' }}
           >
-            No places found for this filter.
+            {searchQuery.trim() ? (
+              <>
+                <p style={{ fontSize: 32, marginBottom: 10 }}>🔮</p>
+                <p
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 700,
+                    color: 'var(--dj-text)',
+                    fontFamily: 'var(--font-display)',
+                    marginBottom: 6,
+                  }}
+                >
+                  No matches found for this vibe.
+                </p>
+                <p style={{ fontSize: 13, color: 'var(--dj-text-secondary)', marginBottom: 20 }}>
+                  Try a different word or clear the search.
+                </p>
+                <button
+                  onClick={() => setSearchQuery('')}
+                  style={{
+                    padding: '10px 24px',
+                    borderRadius: 'var(--dj-radius-full)',
+                    background: 'var(--dj-card)',
+                    border: '1.5px solid var(--dj-border)',
+                    color: 'var(--dj-text)',
+                    fontSize: 14,
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                  }}
+                >
+                  Clear Search
+                </button>
+              </>
+            ) : (
+              <p style={{ fontSize: 14, color: 'var(--dj-muted)' }}>No places found for this filter.</p>
+            )}
           </div>
         ) : (
           <div
