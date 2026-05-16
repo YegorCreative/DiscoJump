@@ -1,6 +1,10 @@
 'use client';
 
-export default function IFeelLikeCTA() {
+interface IFeelLikeCTAProps {
+  onOpen?: () => void;
+}
+
+export default function IFeelLikeCTA({ onOpen }: IFeelLikeCTAProps) {
   return (
     <div
       id="i-feel-like-cta"
@@ -11,6 +15,7 @@ export default function IFeelLikeCTA() {
         id="cta-i-feel-like"
         aria-label="I Feel Like... - Start vibe matching"
         className="btn-gradient"
+        onClick={onOpen}
         style={{
           width: '100%',
           padding: '18px 24px',
@@ -41,8 +46,6 @@ export default function IFeelLikeCTA() {
             Tell us your vibe right now
           </div>
         </div>
-
-        {/* Animated arrow */}
         <div
           style={{
             width: 48,
@@ -60,7 +63,6 @@ export default function IFeelLikeCTA() {
         </div>
       </button>
 
-      {/* Sub-text */}
       <p
         style={{
           textAlign: 'center',
