@@ -43,68 +43,8 @@ export default function VibeDNABanner() {
     );
   }
 
-  // ── No profile: "Build Your Vibe DNA" CTA ────────────────────────────────────
-  if (!profile) {
-    return (
-      <div className="section-px" style={{ marginBottom: 20 }}>
-        <Link
-          href="/onboarding"
-          aria-label="Take the Vibe DNA quiz to personalize your recommendations"
-          style={{ textDecoration: 'none', display: 'block' }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '13px 16px',
-              borderRadius: 'var(--dj-radius-lg)',
-              border: '1px dashed rgba(155,93,229,0.35)',
-              background: 'rgba(155,93,229,0.04)',
-              cursor: 'pointer',
-              transition: 'background 0.15s ease',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{ fontSize: 20 }}>🧬</span>
-              <div>
-                <p
-                  className="font-display"
-                  style={{
-                    fontSize: 14,
-                    fontWeight: 700,
-                    color: 'var(--dj-text)',
-                    marginBottom: 1,
-                  }}
-                >
-                  Build Your Vibe DNA
-                </p>
-                <p style={{ fontSize: 11, color: 'var(--dj-text-secondary)' }}>
-                  Unlock personalized recommendations
-                </p>
-              </div>
-            </div>
-            <span
-              style={{
-                fontSize: 12,
-                fontWeight: 700,
-                background: 'var(--dj-gradient-primary)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                flexShrink: 0,
-              }}
-            >
-              Start →
-            </span>
-          </div>
-        </Link>
-      </div>
-    );
-  }
-
-  // ── Profile exists: "DNA Active" banner ──────────────────────────────────────
-  const vibe = VIBE_TYPES[profile.vibeTypeId];
+  // ── Profile exists: DNA Active banner ──────────────────────────────────────
+  if (profile) {
 
   return (
     <div className="section-px" style={{ marginBottom: 20 }}>
