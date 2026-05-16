@@ -2,6 +2,7 @@ import AppShell from '@/components/layout/AppShell';
 import HomeHeader from '@/components/home/HomeHeader';
 import HomeClient from '@/components/home/HomeClient';
 import MoodChipRow from '@/components/home/MoodChipRow';
+import VibeDNABanner from '@/components/home/VibeDNABanner';
 import RecommendedPlaces from '@/components/home/RecommendedPlaces';
 import HiddenGems from '@/components/home/HiddenGems';
 import SectionHeader from '@/components/ui/SectionHeader';
@@ -23,7 +24,10 @@ export default function HomePage() {
       {/* Mood chips */}
       <MoodChipRow />
 
-      {/* Recommended places */}
+      {/* DNA status banner */}
+      <VibeDNABanner />
+
+      {/* Recommended places — sorted by DNA score when profile exists */}
       <RecommendedPlaces />
 
       {/* Hidden gems */}

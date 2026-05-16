@@ -8,6 +8,8 @@ import SaveButton from './SaveButton';
 
 interface PlaceCardProps {
   place: Place;
+  /** When provided, replaces the static vibeMatch badge with a dynamic DNA score badge */
+  dnaScore?: number;
 }
 
 const priceSymbols = (level: number) =>
@@ -17,7 +19,7 @@ const priceSymbols = (level: number) =>
     </span>
   ));
 
-export default function PlaceCard({ place }: PlaceCardProps) {
+export default function PlaceCard({ place, dnaScore }: PlaceCardProps) {
   return (
     <Link
       href={`/place/${place.id}`}
@@ -62,9 +64,21 @@ export default function PlaceCard({ place }: PlaceCardProps) {
               background: 'linear-gradient(to top, rgba(9,9,9,0.8) 0%, transparent 60%)',
             }}
           />
-          {/* Vibe match badge */}
-          <div className="vibe-badge" style={{ position: 'absolute', top: 8, right: 8 }}>
-            ✦ {place.vibeMatch}%
+          {/* Match badge — DNA score when available, static vibeMatch otherwise */}
+          <div
+            className="vibe-badge"
+            style={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+              ...(dnaScore !== undefined && {
+                background: 'rgba(0,245,255,0.12)',
+                border: '1px solid rgba(0,245,255,0.25)',
+                color: '#00F5FF',
+              }),
+            }}
+          >
+            {dnaScore !== undefined ? `🧬 ${dnaScore}%` : `✦ ${place.vibeMatch}%`}
           </div>
           {/* Category emoji */}
           <div style={{ position: 'absolute', bottom: 8, left: 10, fontSize: 18 }}>
