@@ -48,7 +48,7 @@ export default function PlaceCard({ place, dnaScore }: PlaceCardProps) {
         }}
       >
         {/* Image */}
-        <div style={{ position: 'relative', height: 130, overflow: 'hidden' }}>
+        <div style={{ position: 'relative', height: 145, overflow: 'hidden' }}>
           <Image
             src={place.imageUrl}
             alt={`${place.name} — ${place.category}`}
@@ -93,7 +93,7 @@ export default function PlaceCard({ place, dnaScore }: PlaceCardProps) {
           <h3
             className="font-display"
             style={{
-              fontSize: 14,
+              fontSize: 15,
               fontWeight: 700,
               color: 'var(--dj-text)',
               letterSpacing: '-0.01em',
@@ -122,12 +122,13 @@ export default function PlaceCard({ place, dnaScore }: PlaceCardProps) {
               <span
                 key={tag}
                 style={{
-                  fontSize: 10,
+                  fontSize: 11,
                   fontWeight: 500,
                   color: 'var(--dj-text-secondary)',
-                  background: 'rgba(255,255,255,0.06)',
-                  borderRadius: 4,
-                  padding: '2px 6px',
+                  background: 'rgba(255,255,255,0.07)',
+                  border: '1px solid rgba(255,255,255,0.09)',
+                  borderRadius: 6,
+                  padding: '3px 7px',
                 }}
               >
                 {tag}

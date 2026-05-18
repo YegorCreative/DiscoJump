@@ -12,11 +12,10 @@ export default function ProfileVibeSection() {
     return (
       <div className="section-px" style={{ marginBottom: 28 }}>
         <div
-          className="glass-card"
+          className="glass-card skeleton"
           style={{
             height: 120,
             borderRadius: 'var(--dj-radius-lg)',
-            opacity: 0.35,
           }}
         />
       </div>

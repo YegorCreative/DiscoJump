@@ -51,13 +51,13 @@ export default function VibeCard({ place, size = 'large' }: VibeCardProps) {
         style={{ objectFit: 'cover' }}
       />
 
-      {/* Full gradient overlay */}
+      {/* Full gradient overlay — deep cinematic vignette */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
           background:
-            'linear-gradient(to top, rgba(9,9,9,0.95) 0%, rgba(9,9,9,0.3) 50%, transparent 100%)',
+            'linear-gradient(to top, rgba(9,9,9,0.98) 0%, rgba(9,9,9,0.65) 35%, rgba(9,9,9,0.2) 60%, transparent 100%)',
         }}
       />
 

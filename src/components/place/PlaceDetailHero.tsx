@@ -39,13 +39,13 @@ export default function PlaceDetailHero({ place }: PlaceDetailHeroProps) {
         />
       </motion.div>
 
-      {/* Multi-stop gradient overlay — image fades to surface at bottom */}
+      {/* Multi-stop gradient overlay — rich cinematic vignette */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
           background:
-            'linear-gradient(to top, var(--dj-surface) 0%, rgba(14,14,22,0.65) 40%, rgba(14,14,22,0.2) 70%, transparent 100%)',
+            'linear-gradient(to top, var(--dj-surface) 0%, rgba(14,14,22,0.92) 18%, rgba(14,14,22,0.72) 36%, rgba(14,14,22,0.32) 58%, rgba(14,14,22,0.08) 78%, transparent 100%)',
         }}
       />
 

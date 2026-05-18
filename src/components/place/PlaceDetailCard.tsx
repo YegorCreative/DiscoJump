@@ -312,6 +312,7 @@ export default function PlaceDetailCard({ place }: PlaceDetailCardProps) {
           <button
             id="place-map-btn"
             aria-label={`Open ${place.name} in maps`}
+            className="btn-secondary"
             onClick={() =>
               window.open(
                 `https://maps.google.com/?q=${encodeURIComponent(
@@ -343,6 +344,7 @@ export default function PlaceDetailCard({ place }: PlaceDetailCardProps) {
           <button
             id="place-share-action-btn"
             aria-label={`Share ${place.name}`}
+            className="btn-secondary"
             style={{
               flex: 1,
               padding: '13px',

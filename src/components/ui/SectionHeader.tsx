@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 interface SectionHeaderProps {
   title: string;
   subtitle?: string;
@@ -52,7 +54,7 @@ export default function SectionHeader({
         )}
       </div>
       {ctaLabel && ctaHref && (
-        <a
+        <Link
           href={ctaHref}
           style={{
             fontSize: 13,
@@ -66,7 +68,7 @@ export default function SectionHeader({
           }}
         >
           {ctaLabel} →
-        </a>
+        </Link>
       )}
     </div>
   );

@@ -134,6 +134,13 @@ export default function MoodEngineModal({ onClose }: MoodEngineModalProps) {
   const [energy, setEnergy] = useState<string | null>(null);
   const [distance, setDistance] = useState<string | null>(null);
 
+  // Body scroll lock
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
   // Escape key
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
